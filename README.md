@@ -10,4 +10,4 @@
   * 6. check if the driver is in the wim file or not.
   * 7. unmount image.
 
-* Reference:https://docs.microsoft.com/zh-tw/windows-hardware/manufacture/desktop/add-and-remove-drivers-to-an-offline-windows-image
+* Reference: [Microsoft](https://docs.microsoft.com/zh-tw/windows-hardware/manufacture/desktop/add-and-remove-drivers-to-an-offline-windows-image, "Microsoft")
