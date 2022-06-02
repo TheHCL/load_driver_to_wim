@@ -22,6 +22,9 @@ def working_directory():
     offline_loc = directory_selected+"\\offline"
     global driver_loc
     driver_loc = directory_selected+"\\drivers"
+    global package_loc
+    package_loc = directory_selected+"\\package"
+
     if os.path.exists(directory_selected):
         print("Working space exists.")
     else:
@@ -29,6 +32,7 @@ def working_directory():
         os.mkdir(wim_file_loc)
         os.mkdir(offline_loc)
         os.mkdir(driver_loc)
+        os.mkdir(package_loc)
         os.system("cls")
         print("Working Directory created.\n")
 
@@ -46,7 +50,23 @@ def mount_image():
     os.system("cls")
     print("mount image complete.")
     lock.release()
-    
+
+
+def add_package():
+    tmp=[]
+    files = filedialog.askopenfilenames()
+    for x in files:
+        x = x.replace("/","\\")
+        tmp.append(" /PackagePath="+package_loc)
+        os.system("copy "+x+" "+package_loc)
+    cmd = "Dism /image:"+offline_loc+" /Add-Package"
+    for x in tmp:
+        cmd+=x
+    os.system(cmd)
+
+def get_package():
+    os.system("Dism /image:"+offline_loc+" /Get-Packages")
+  
         
 
 def add_driver():
@@ -76,13 +96,15 @@ def thread_unmount():
 lock = threading.Lock()
 
 window = tk.Tk()
-window.geometry('300x175')
-window.title("Load Driver to Wim")
+window.geometry('350x300')
+window.title("WIM Modification")
 tk.Button(window,text="get Wim info",command=get_wim_info).pack()
 var = tk.StringVar()
 content = tk.Entry(window,textvariable=var).pack()
 tk.Button(window,text="Choose working directory",command=working_directory).pack()
 tk.Button(window,text="mount image",command=thread_mount).pack()
+tk.Button(window,text="add packages",command=add_package).pack()
+tk.Button(window,text="check packages on wim",command=get_package).pack()
 tk.Button(window,text="add drivers",command=add_driver).pack()
 tk.Button(window,text="check driver on wim",command=get_driver).pack()
 tk.Button(window,text="unmount image",command=thread_unmount).pack()
