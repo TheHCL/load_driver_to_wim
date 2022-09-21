@@ -8,6 +8,7 @@
   * 4. Mount image
   * 5. add drivers
   * 6. check if the driver is in the wim file or not.
-  * 7. unmount image.
+  * 7. Bypassnro (win11 22H2)
+  * 8. unmount image.
 
 * Reference: [Microsoft](https://docs.microsoft.com/zh-tw/windows-hardware/manufacture/desktop/add-and-remove-drivers-to-an-offline-windows-image, "Microsoft")
