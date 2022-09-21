@@ -70,18 +70,34 @@ def get_package():
         
 
 def add_driver():
-    files = filedialog.askopenfilenames()
-    for x in files:
-        x = x.replace("/","\\")
-        print(x)
-        os.system("copy "+x+" "+driver_loc)
-    os.system("Dism /image:"+offline_loc+" /Add-Driver /Driver:"+driver_loc+" /Recurse")
+    #files = filedialog.askopenfilenames()
+    driver_folder_loc = filedialog.askdirectory()
+    driver_folder_loc = driver_folder_loc.replace("/","\\")
+    # for x in files:
+    #     x = x.replace("/","\\")
+    #     print(x)
+    #     os.system("copy "+x+" "+driver_loc)
+    os.system("xcopy "+driver_folder_loc+" "+driver_loc)
+    os.system("Dism /image:"+offline_loc+" /Add-Driver /Driver:"+driver_loc+" /Recurse /ForceUnsigned")
 
 def get_driver():
     os.system("Dism /image:"+offline_loc+" /Get-Drivers")
 
+
+def bypass_nro():
+    os.system("cls")
+    os.system("reg load HKLM\\OFFLINE "+offline_loc+"\\Windows\\System32\\Config\\SOFTWARE")
+    os.system("reg add HKLM\\OFFLINE\\Microsoft\\Windows\\CurrentVersion\\OOBE /v BypassNRO /t REG_DWORD /d 1 /f")
+    os.system("reg unload HKLM\\OFFLINE")
+    
+    #os.system("reg add HLKM\\OFFLINE\\SOFTWARE\\")
+    #print("reg load HLKM\\OFFLINE "+offline_loc+"\\Windows\\System32\\Config\\SOFTWARE")
+    print("\n\nBypassNRO complete.")
+
+
 def unmount_image():
     lock.acquire()
+    os.system("cls")
     os.system("Dism /Unmount-image /MountDir:"+offline_loc+" /commit")
     lock.release()
     print("\n\n\nUnmont complete.\n wim_file_loc:\n"+new_wim_loc)
@@ -105,6 +121,7 @@ tk.Button(window,text="Choose working directory",command=working_directory).pack
 tk.Button(window,text="mount image",command=thread_mount).pack()
 tk.Button(window,text="add packages",command=add_package).pack()
 tk.Button(window,text="check packages on wim",command=get_package).pack()
+tk.Button(window,text="bypass_nro",command=bypass_nro).pack()
 tk.Button(window,text="add drivers",command=add_driver).pack()
 tk.Button(window,text="check driver on wim",command=get_driver).pack()
 tk.Button(window,text="unmount image",command=thread_unmount).pack()
